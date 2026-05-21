@@ -65,3 +65,38 @@ def turno_heroi(heroi, monstro):
         print("  Escolha inválida. Turno perdido!")
 
     return True
+
+
+def combate(heroi, monstro):
+    """Laço principal de combate. Alterna turnos até alguém morrer ou o herói fugir."""
+    print(f"\n{'='*50}")
+    print(f"  BATALHA: {heroi['nome']} vs {monstro['nome']}")
+    print(f"{'='*50}")
+
+    turno = 1
+    while heroi["vida"] > 0 and monstro["vida"] > 0:
+        print(f"\n--- Turno {turno} ---")
+        exibir_status(heroi)
+        exibir_status(monstro)
+
+        if not turno_heroi(heroi, monstro):
+            return  # herói fugiu
+
+        if monstro["vida"] > 0:
+            atacar(monstro, heroi)
+
+        turno += 1
+
+    print(f"\n{'='*50}")
+    if heroi["vida"] > 0:
+        print(f"  VITÓRIA! {heroi['nome']} venceu a batalha!")
+    else:
+        print(f"  DERROTA. {monstro['nome']} venceu.")
+    print(f"{'='*50}")
+
+
+# Programa principal
+if __name__ == "__main__":
+    print("=== Mini RPG de Terminal — versão procedural ===")
+    print("(POO começa na próxima aula — aqui só funções e dicionários)\n")
+    combate(heroi, monstro)
