@@ -25,7 +25,7 @@ class Personagem:
         if item is None:
             return False
         if item.tipo == "consumível":
-            self.vida = min(self.vida + item.valor, self.vida + item.valor)
+            self.vida += item.valor  # sem teto por enquanto; max_vida vem na Aula 9 com @property
             print(f"  {self.nome} usou {item.nome} e recuperou {item.valor} pontos de vida!")
         return True
 
