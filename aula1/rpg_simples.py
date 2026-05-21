@@ -37,3 +37,31 @@ def atacar(atacante, defensor):
     sufixo = " (CRÍTICO!)" if critico else ""
     print(f"  {atacante['nome']} ataca {defensor['nome']}: "
           f"{dano} de dano{sufixo} | Vida restante: {defensor['vida']}")
+
+
+def turno_heroi(heroi, monstro):
+    """Lê a escolha do jogador e executa a ação correspondente.
+    Retorna False se o herói decidir fugir, True caso contrário."""
+    print("\nO que você quer fazer?")
+    print("  1 - Atacar")
+    print("  2 - Usar Poção de Vida")
+    print("  3 - Fugir")
+    escolha = input("Escolha: ").strip()
+
+    if escolha == "1":
+        atacar(heroi, monstro)
+    elif escolha == "2":
+        if "Poção de Vida" in heroi["inventario"]:
+            heroi["inventario"].remove("Poção de Vida")
+            heroi["vida"] = min(100, heroi["vida"] + 30)
+            print(f"  {heroi['nome']} usou Poção de Vida e recuperou 30 pontos! "
+                  f"Vida: {heroi['vida']}")
+        else:
+            print("  Sem Poções de Vida no inventário!")
+    elif escolha == "3":
+        print(f"  {heroi['nome']} fugiu da batalha...")
+        return False
+    else:
+        print("  Escolha inválida. Turno perdido!")
+
+    return True
