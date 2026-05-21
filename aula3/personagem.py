@@ -1,0 +1,26 @@
+class Personagem:
+    """Representa um personagem jogável do RPG."""
+
+    def __init__(self, nome: str, vida: int, ataque: int, defesa: int) -> None:
+        self.nome = nome
+        self.vida = vida
+        self.ataque = ataque
+        self.defesa = defesa
+
+    def atacar(self, alvo: "Personagem") -> int:
+        """Ataca o alvo e retorna o dano causado."""
+        dano = max(0, self.ataque - alvo.defesa)
+        alvo.receber_dano(dano)
+        return dano
+
+    def receber_dano(self, quantidade: int) -> None:
+        """Reduz a vida do personagem, sem deixar abaixo de zero."""
+        self.vida = max(0, self.vida - quantidade)
+
+    def esta_vivo(self) -> bool:
+        """Retorna True enquanto vida > 0."""
+        return self.vida > 0
+
+    def __str__(self) -> str:
+        return (f"{self.nome} | vida: {self.vida} | "
+                f"ataque: {self.ataque} | defesa: {self.defesa}")
