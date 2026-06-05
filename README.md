@@ -11,6 +11,7 @@ Repositório de acompanhamento da disciplina. Cada pasta contém a solução de 
 | `aula3/` | Aula 3 | Primeiras classes OO — `Personagem`, `Monstro`, `main.py` |
 | `aula4/` | Aula 4 | Pacote `rpg/` com composição — `Item`, `Inventario`, `@classmethod` |
 | `aula5/` | Aula 5 | Herança — `Guerreiro`, `Mago`, `Arqueiro` com três padrões de override + ensaio |
+| `aula6/` | Aula 6 | Polimorfismo e duck typing — subclasses de `Monstro` (`monstros.py`), classe `Combate`, protocolo de tipo de dano |
 
 ## Como usar
 
