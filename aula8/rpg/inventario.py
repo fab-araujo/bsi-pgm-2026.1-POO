@@ -1,5 +1,6 @@
 from __future__ import annotations
 from rpg.item import Item
+from rpg.exceptions import InventarioCheioError
 
 
 class Inventario:
@@ -29,14 +30,19 @@ class Inventario:
     def adicionar(self, item: Item) -> bool:
         """Adiciona item ao inventário. Valida tipo e respeita LIMITE.
 
-        Devolve True se adicionou, False se o tipo for inválido ou se o
-        inventário estiver cheio. A validação de tipo é delegada para
-        Item.tipo_valido — quem decide o que é tipo válido é a classe Item.
+        Devolve True se adicionou. Tipo inválido continua devolvendo False
+        (validação de dado de entrada que o chamador consegue checar antes,
+        contrato da Aula 4). Inventário cheio, porém, é fluxo que NÃO pode
+        continuar: levanta InventarioCheioError (Aula 8). A validação de
+        tipo é delegada para Item.tipo_valido — quem decide o que é tipo
+        válido é a classe Item.
         """
         if not Item.tipo_valido(item.tipo):
             return False
         if len(self._itens) >= self.LIMITE:
-            return False
+            raise InventarioCheioError(
+                f"inventário cheio ({self.LIMITE} slots) — não coube: {item.nome}"
+            )
         self._itens.append(item)
         return True
 
