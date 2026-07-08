@@ -6,14 +6,14 @@ class Mago(Personagem):
 
     Padrão de override: EXTENSÃO POR super().
 
-    Chama o ataque da classe-base (super().atacar) e, em seguida,
-    acrescenta dano mágico. Preserva tudo o que a base faz e estende
-    com comportamento próprio. O retorno soma os dois danos.
+    Sobrescreve _calcular_dano chamando o cálculo da base (super()) e
+    somando dano mágico. Preserva tudo o que a base calcula e estende com
+    comportamento próprio. Como o dano agora é UM número só, quem o aplica
+    (uma vez, via receber_dano com self.tipo_dano) é o atacar da base —
+    diferente da Aula 6, em que havia DUAS chamadas a receber_dano.
 
-    tipo_dano sobrescrito para "magico" (Aula 6): tanto o golpe base
-    (via super().atacar, que usa self.tipo_dano) quanto o dano mágico
-    extra entram como "magico" — por isso o Mago ignora a resistência
-    física do Esqueleto.
+    tipo_dano sobrescrito para "magico" (Aula 6): o dano total entra como
+    "magico" — por isso o Mago ignora a resistência física do Esqueleto.
     """
 
     tipo_dano: str = "magico"
@@ -24,11 +24,6 @@ class Mago(Personagem):
         # mana é decorativo nesta aula — ganha papel real em aulas seguintes
         self.mana = mana
 
-    def atacar(self, alvo) -> int:
-        """Golpe físico base + dano mágico fixo."""
-        dano_base = super().atacar(alvo)        # parte física, já com tipo_dano="magico"
-        dano_magico = 5
-        # a segunda chamada também precisa passar self.tipo_dano — senão o
-        # dano extra entraria como "fisico" e seria cortado pelo Esqueleto
-        alvo.receber_dano(dano_magico, self.tipo_dano)
-        return dano_base + dano_magico
+    def _calcular_dano(self, alvo) -> int:
+        """Dano-base da classe (super) + dano mágico fixo."""
+        return super()._calcular_dano(alvo) + 5

@@ -6,7 +6,8 @@ class Guerreiro(Personagem):
 
     Padrão de override: SUBSTITUIÇÃO COMPLETA.
 
-    Reescreve atacar sem chamar super(). O contrato é preservado —
+    Reescreve _calcular_dano sem chamar super() (Aula 8: o override migrou
+    de atacar para o método interno de cálculo). O contrato é preservado —
     mesma assinatura, mesmo efeito observável (reduz a vida do alvo,
     devolve o dano) —, o que muda é a estratégia interna de cálculo:
     em vez do dano base, soma um bônus fixo da arma.
@@ -22,8 +23,11 @@ class Guerreiro(Personagem):
         # atributo próprio: usado no flavor (aparece no __str__ futuramente)
         self.arma = arma
 
-    def atacar(self, alvo) -> int:
-        """Golpe físico com bônus de arma (forca + 5)."""
-        dano = self.forca + 5
-        alvo.receber_dano(dano, self.tipo_dano)
-        return dano
+    def _calcular_dano(self, alvo) -> int:
+        """Golpe físico com bônus de arma (forca + 5).
+
+        Substituição completa: reescreve o cálculo da base sem chamar
+        super(). Quem valida (morto não ataca) e aplica o dano é o atacar
+        da base — este método só devolve o número.
+        """
+        return self.forca + 5

@@ -1,4 +1,5 @@
 from rpg.inventario import Inventario
+from rpg.exceptions import PersonagemMortoError
 
 
 class Personagem:
@@ -23,11 +24,24 @@ class Personagem:
     def atacar(self, alvo) -> int:
         """Ataca o alvo e retorna o dano causado.
 
-        Passa self.tipo_dano ao defensor (Aula 6). O retorno é usado pelas
-        subclasses — por exemplo, Mago chama super().atacar(alvo) e soma
-        dano mágico ao retorno.
+        Três responsabilidades, nesta ordem (Aula 8): (1) VALIDAR — morto
+        não ataca, levanta PersonagemMortoError; (2) CALCULAR — delega o
+        dano ao método interno _calcular_dano; (3) APLICAR — entrega o dano
+        ao alvo com self.tipo_dano e devolve o valor. A validação mora aqui,
+        num só lugar; as subclasses só sobrescrevem _calcular_dano.
         """
-        alvo.receber_dano(self.forca, self.tipo_dano)
+        if not self.esta_vivo():
+            raise PersonagemMortoError(f"{self.nome} está morto e não pode atacar")
+        dano = self._calcular_dano(alvo)
+        alvo.receber_dano(dano, self.tipo_dano)
+        return dano
+
+    def _calcular_dano(self, alvo) -> int:
+        """Dano-base do personagem. Uso interno (sublinhado, Aula 4).
+
+        Ponto de extensão do polimorfismo: cada subclasse sobrescreve ESTE
+        método (não o atacar) com a sua estratégia de cálculo.
+        """
         return self.forca
 
     def receber_dano(self, quantidade: int, tipo_dano: str = "fisico") -> None:
