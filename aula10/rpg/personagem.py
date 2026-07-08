@@ -1,9 +1,17 @@
+from abc import ABC, abstractmethod
+
 from rpg.inventario import Inventario
 from rpg.exceptions import PersonagemMortoError, XPInvalidoError
 
 
-class Personagem:
-    """Representa um personagem jogável. Tem um Inventario por composição."""
+class Personagem(ABC):
+    """Conceito abstrato de herói jogável (Aula 10).
+
+    Herda de ABC: "personagem em geral" não se materializa no jogo — o que
+    existe é um Guerreiro, um Mago, um Arqueiro. Instanciar Personagem
+    diretamente levanta TypeError, porque golpe_especial é abstrato e só as
+    subclasses concretas o implementam.
+    """
 
     # Atributo de CLASSE: o tipo de dano que este combatente aplica.
     # Introduzido na Aula 6 para o protocolo de tipo de dano — quem reage
@@ -11,8 +19,18 @@ class Personagem:
     # receber_dano. O default "fisico" mantém a compatibilidade.
     tipo_dano: str = "fisico"
 
+    # Atributo de CLASSE usado como contador para o id de domínio (Aula 10).
+    # Cada __init__ o incrementa, então cada personagem recebe um número
+    # diferente, na ordem de criação.
+    _contador = 0
+
     def __init__(self, nome: str, vida: int, forca: int,
                  nivel: int = 1, xp: int = 0) -> None:
+        # id de domínio (Frente 2): gerado na base, antes dos demais
+        # atributos. Sublinhado — não usar o built-in id (endereço de
+        # memória, conceito diferente).
+        Personagem._contador += 1
+        self._id = Personagem._contador
         self.nome = nome
         self.forca = forca
         # vida_maxima é o teto da barra de vida (Aula 9). ATENÇÃO À ORDEM:
@@ -110,6 +128,17 @@ class Personagem:
         """
         return self.forca
 
+    @abstractmethod
+    def golpe_especial(self, alvo):
+        """Contrato abstrato (Aula 10): todo personagem tem um golpe especial.
+
+        Cada subclasse concreta implementa o seu, seguindo a interface de
+        atacar: aplica o efeito ao alvo (alvo.receber_dano(...)) e devolve o
+        dano causado (int). Sem corpo aqui — é só o contrato; a classe fica
+        abstrata e não pode ser instanciada.
+        """
+        ...
+
     def receber_dano(self, quantidade: int, tipo_dano: str = "fisico") -> None:
         """Reduz a vida, sem deixar abaixo de zero.
 
@@ -139,3 +168,34 @@ class Personagem:
     def mostrar_status(self) -> None:
         """Imprime o estado atual do personagem."""
         print(f"{self.nome} — nível {self.nivel}, vida {self.vida}, XP {self.xp}")
+
+    # --- Métodos mágicos (Frente 3, Aula 10) ---
+
+    def __str__(self) -> str:
+        """Saída amigável para o usuário final (usada por print)."""
+        return f"{self.nome} ({type(self).__name__}), nível {self.nivel}"
+
+    def __repr__(self) -> str:
+        """Representação para depuração, com o estado completo do objeto."""
+        return (f"{type(self).__name__}(id={self._id}, nome={self.nome!r}, "
+                f"vida={self.vida}/{self.vida_maxima}, nivel={self.nivel}, "
+                f"xp={self.xp})")
+
+    def __eq__(self, other) -> bool:
+        """Igualdade pelo id de DOMÍNIO (Frente 2), não pelos atributos.
+
+        Dois guerreiros "Boromir" com a mesma vida e força são heróis
+        diferentes. Se o outro não for Personagem, devolve NotImplemented
+        para o Python tentar a comparação pelo outro lado.
+        """
+        if not isinstance(other, Personagem):
+            return NotImplemented
+        return self._id == other._id
+
+    def __hash__(self) -> int:
+        """Coerente com __eq__: deriva do mesmo id de domínio.
+
+        Sem isto, definir __eq__ tornaria o Personagem não-hasheável e ele
+        não poderia entrar em um set nem ser chave de dict.
+        """
+        return hash(self._id)
