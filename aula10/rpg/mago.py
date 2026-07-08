@@ -27,3 +27,14 @@ class Mago(Personagem):
     def _calcular_dano(self, alvo) -> int:
         """Dano-base da classe (super) + dano mágico fixo."""
         return super()._calcular_dano(alvo) + 5
+
+    def golpe_especial(self, alvo):
+        """Explosão Arcana: forca + 10, com tipo_dano "magico".
+
+        Implementa o contrato abstrato da base (Aula 10). Será refatorado
+        na Aula 12 para lançar uma magia do grimório — esta versão é o
+        gancho que a Aula 12 reaproveita.
+        """
+        dano = self.forca + 10
+        alvo.receber_dano(dano, self.tipo_dano)
+        return dano

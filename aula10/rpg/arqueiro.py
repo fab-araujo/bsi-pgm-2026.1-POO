@@ -31,3 +31,17 @@ class Arqueiro(Personagem):
             self.flechas -= 1
             return int(self.forca * 1.5)
         return self.forca // 2
+
+    def golpe_especial(self, alvo):
+        """Saraivada: gasta 3 flechas para forca * 3.
+
+        Sem 3 flechas, é um tiro fraco (forca // 2). Implementa o contrato
+        abstrato da base (Aula 10): aplica o dano ao alvo e devolve o valor.
+        """
+        if self.flechas >= 3:
+            self.flechas -= 3
+            dano = self.forca * 3
+        else:
+            dano = self.forca // 2
+        alvo.receber_dano(dano, self.tipo_dano)
+        return dano

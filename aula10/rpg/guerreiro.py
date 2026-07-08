@@ -31,3 +31,13 @@ class Guerreiro(Personagem):
         da base — este método só devolve o número.
         """
         return self.forca + 5
+
+    def golpe_especial(self, alvo):
+        """Golpe Brutal: dano físico dobrado (forca * 2).
+
+        Implementa o contrato abstrato da base (Aula 10). Como o atacar,
+        aplica o dano ao alvo com self.tipo_dano e devolve o valor.
+        """
+        dano = self.forca * 2
+        alvo.receber_dano(dano, self.tipo_dano)
+        return dano
