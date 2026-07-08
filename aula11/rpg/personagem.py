@@ -1,7 +1,9 @@
+from __future__ import annotations
 from abc import ABC, abstractmethod
 
 from rpg.inventario import Inventario
 from rpg.exceptions import PersonagemMortoError, XPInvalidoError
+from rpg.efeito import Efeito
 
 
 class Personagem(ABC):
@@ -47,6 +49,9 @@ class Personagem(ABC):
         self.xp = xp
         # composição: o Inventario pertence a este Personagem
         self.inventario: Inventario = Inventario.criar_inicial()
+        # efeitos contínuos ativos (Aula 11); consumidos turno a turno na
+        # Aula 13. Começa vazia.
+        self.efeitos_ativos: list[Efeito] = []
 
     @property
     def vida(self) -> int:
@@ -164,6 +169,10 @@ class Personagem(ABC):
             self.vida = self.vida + item.valor
             print(f"  {self.nome} usou {item.nome} e recuperou {item.valor} pontos de vida!")
         return True
+
+    def adicionar_efeito(self, efeito: Efeito) -> None:
+        """Acrescenta um Efeito à lista de efeitos ativos (Aula 11)."""
+        self.efeitos_ativos.append(efeito)
 
     def mostrar_status(self) -> None:
         """Imprime o estado atual do personagem."""
