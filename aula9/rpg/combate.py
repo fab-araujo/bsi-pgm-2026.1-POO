@@ -27,11 +27,15 @@ class Combate:
 
         # 2. Ação do atacante
         dano_atk = self.atacante.atacar(self.defensor)
+        if not self.defensor.esta_vivo():
+            self._distribuir_xp(self.atacante, self.defensor)
 
         # 3. Contra-ataque se o defensor continua vivo
         dano_def = 0
         if self.defensor.esta_vivo():
             dano_def = self.defensor.atacar(self.atacante)
+            if not self.atacante.esta_vivo():
+                self._distribuir_xp(self.defensor, self.atacante)
 
         # 4. Efeitos ativos do defensor (preparatório — no-op nesta aula)
 
@@ -41,6 +45,18 @@ class Combate:
             "atacante_vivo": self.atacante.esta_vivo(),
             "defensor_vivo": self.defensor.esta_vivo(),
         }
+
+    @staticmethod
+    def _distribuir_xp(vencedor, perdedor) -> None:
+        """Dá XP ao vencedor por derrotar o perdedor (Aula 9).
+
+        Fórmula desta oferta: nível_do_inimigo * 50. Duck typing (Aula 6):
+        só quem TEM ganhar_xp recebe XP — ou seja, só o Personagem; o
+        Monstro foi modelado sem XP desde a Aula 3, então quando um Monstro
+        mata o Personagem a batalha encerra sem distribuir nada.
+        """
+        if hasattr(vencedor, "ganhar_xp"):
+            vencedor.ganhar_xp(perdedor.nivel * 50)
 
     def lutar(self):
         """Itera turnos até um lado morrer. Devolve o vencedor."""
