@@ -1,36 +1,35 @@
-from rpg.personagem import Personagem
-from rpg.guerreiro import Guerreiro
+from rpg.mago import Mago
 from rpg.monstros import Goblin
+from rpg.efeito import Efeito
 
 
 if __name__ == "__main__":
-    # Aula 10: Personagem virou classe abstrata (ABC), o id de domínio
-    # dá identidade a cada herói e os métodos mágicos definem str/repr/
-    # igualdade/hash. O programa roda do início ao fim SEM traceback.
+    # Aula 11: Efeito é uma @dataclass e o Mago aplica queimadura ao atacar.
+    # O programa roda do início ao fim SEM traceback.
 
-    print("=== 1. Personagem é abstrato ===")
-    # Instanciar Personagem direto falha — golpe_especial é abstrato.
-    try:
-        Personagem("Genérico", 100, 10)
-    except TypeError as erro:
-        print(f"  Não dá para criar um Personagem genérico: {erro}")
+    print("=== 1. Efeito é uma dataclass ===")
+    # repr e == gerados automaticamente pelo @dataclass.
+    queima = Efeito("Queimadura", -5, 3)
+    print(f"  repr gerado: {queima!r}")
+    print(f"  == gerado:   {Efeito('Queimadura', -5, 3) == queima}")
 
-    print("\n=== 2. Igualdade pelo id de domínio ===")
-    a = Guerreiro("Boromir", 100, 20)
-    b = Guerreiro("Boromir", 100, 20)      # mesmo nome e classe, herói diferente
-    print(f"  a = {a!r}")
-    print(f"  b = {b!r}")
-    print(f"  a == a  →  {a == a}   (um personagem é igual a si mesmo)")
-    print(f"  a == b  →  {a == b}   (ids diferentes → heróis diferentes)")
-    print(f"  str(a)  →  {a}")
+    print("\n=== 2. O ataque do Mago deixa uma queimadura no alvo ===")
+    mago = Mago("Gandalf", 80, 15)
+    alvo = Goblin(vida=100)
+    dano = mago.atacar(alvo)
+    print(f"  {mago.nome} atacou causando {dano} — alvo com {alvo.vida} de vida")
+    print(f"  efeitos ativos no alvo: {alvo.efeitos_ativos}")
 
-    print("\n=== 3. set não funde personagens distintos ===")
-    equipe = {a, a, b}                      # 'a' repetido + 'b'
-    print(f"  {{a, a, b}} tem {len(equipe)} elementos (descartou só a repetição de 'a')")
+    print("\n=== 3. aplicar reduz a vida de quem está vivo ===")
+    vivo = Goblin(vida=100)
+    print(f"  antes:  vida = {vivo.vida}")
+    Efeito("Queimadura", -5, 3).aplicar(vivo)
+    print(f"  depois: vida = {vivo.vida}   (perdeu 5 de vida)")
 
-    print("\n=== 4. golpe_especial (contrato cumprido pela subclasse) ===")
-    alvo = Goblin(vida=1000)
-    dano = a.golpe_especial(alvo)
-    print(f"  {a.nome} usou o Golpe Brutal: {dano} de dano (alvo com {alvo.vida} de vida)")
+    print("\n=== 4. aplicar NÃO afeta um combatente morto ===")
+    morto = Goblin(vida=5)
+    morto.receber_dano(5)                  # vida vai a 0
+    Efeito("Regeneração", +10, 2).aplicar(morto)
+    print(f"  regeneração em morto → vida = {morto.vida}   (não ressuscita)")
 
     print("\nFim da demonstração.")
