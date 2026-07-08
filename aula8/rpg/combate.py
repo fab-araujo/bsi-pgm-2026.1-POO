@@ -1,3 +1,6 @@
+from rpg.exceptions import RpgError
+
+
 class Combate:
     """Gerencia uma batalha entre dois combatentes.
 
@@ -43,7 +46,15 @@ class Combate:
         """Itera turnos até um lado morrer. Devolve o vencedor."""
         turno = 1
         while self.atacante.esta_vivo() and self.defensor.esta_vivo():
-            resumo = self.executar_turno()
+            # Rede de segurança na BORDA (Aula 8): qualquer falha do domínio
+            # (RpgError e subclasses) que suba da pilha encerra o combate com
+            # mensagem amigável, em vez de derrubar o programa. Bugs de
+            # programação (que não são RpgError) continuam estourando.
+            try:
+                resumo = self.executar_turno()
+            except RpgError as erro:
+                print(f"[combate interrompido] {erro}")
+                return None
             print(f"Turno {turno}: "
                   f"{self.atacante.nome} causou {resumo['dano_atacante']} | "
                   f"{self.defensor.nome} causou {resumo['dano_defensor']}")
