@@ -32,7 +32,7 @@ class Arqueiro(Personagem):
             return int(self.forca * 1.5)
         return self.forca // 2
 
-    def golpe_especial(self, alvo):
+    def golpe_especial(self, alvo) -> int:
         """Saraivada: gasta 3 flechas para forca * 3.
 
         Sem 3 flechas, é um tiro fraco (forca // 2). Implementa o contrato

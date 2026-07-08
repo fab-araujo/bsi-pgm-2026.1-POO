@@ -32,7 +32,7 @@ class Guerreiro(Personagem):
         """
         return self.forca + 5
 
-    def golpe_especial(self, alvo):
+    def golpe_especial(self, alvo) -> int:
         """Golpe Brutal: dano físico dobrado (forca * 2).
 
         Implementa o contrato abstrato da base (Aula 10). Como o atacar,

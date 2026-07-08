@@ -42,7 +42,7 @@ class Mago(Personagem):
         """Dano-base da classe (super) + dano mágico fixo."""
         return super()._calcular_dano(alvo) + 5
 
-    def golpe_especial(self, alvo):
+    def golpe_especial(self, alvo) -> int:
         """Explosão Arcana: forca + 10, com tipo_dano "magico".
 
         Implementa o contrato abstrato da base (Aula 10). Será refatorado

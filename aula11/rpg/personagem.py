@@ -134,7 +134,7 @@ class Personagem(ABC):
         return self.forca
 
     @abstractmethod
-    def golpe_especial(self, alvo):
+    def golpe_especial(self, alvo) -> int:
         """Contrato abstrato (Aula 10): todo personagem tem um golpe especial.
 
         Cada subclasse concreta implementa o seu, seguindo a interface de
