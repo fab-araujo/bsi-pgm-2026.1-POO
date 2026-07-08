@@ -13,6 +13,7 @@ Repositório de acompanhamento da disciplina. Cada pasta contém a solução de 
 | `aula5/` | Aula 5 | Herança — `Guerreiro`, `Mago`, `Arqueiro` com três padrões de override + ensaio |
 | `aula6/` | Aula 6 | Polimorfismo e duck typing — subclasses de `Monstro` (`monstros.py`), classe `Combate`, protocolo de tipo de dano |
 | `aula8/` | Aula 8 | Tratamento de exceções — hierarquia `RpgError` (`exceptions.py`), `raise` no `Inventario`/`Personagem`, captura na borda do `Combate` |
+| `aula9/` | Aula 9 | Properties com validação — `vida` (clamp), `nivel` (`ValueError`), `xp` (`XPInvalidoError`) + sistema de XP no `Combate` |
 
 ## Como usar
 
