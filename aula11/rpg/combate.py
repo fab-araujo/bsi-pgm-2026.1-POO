@@ -59,7 +59,14 @@ class Combate:
             vencedor.ganhar_xp(perdedor.nivel * 50)
 
     def lutar(self):
-        """Itera turnos até um lado morrer. Devolve o vencedor."""
+        """Itera turnos até um lado morrer. Devolve o vencedor.
+
+        Sem anotação de retorno de propósito (Aula 11): o vencedor é um
+        combatente duck-typed (pode ser Personagem ou Monstro), e forçar um
+        tipo concreto aqui contraria a decisão de projeto do Combate — a
+        mesma razão pela qual os parâmetros atacante/defensor ficam sem
+        anotação. Devolve None quando o combate é interrompido por RpgError.
+        """
         turno = 1
         while self.atacante.esta_vivo() and self.defensor.esta_vivo():
             # Rede de segurança na BORDA (Aula 8): qualquer falha do domínio
