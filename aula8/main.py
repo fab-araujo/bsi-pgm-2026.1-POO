@@ -1,33 +1,46 @@
 from rpg.guerreiro import Guerreiro
 from rpg.mago import Mago
-from rpg.arqueiro import Arqueiro
-from rpg.monstros import Goblin, Dragao, Esqueleto
+from rpg.monstros import Goblin
+from rpg.item import Item
 from rpg.combate import Combate
+from rpg.exceptions import RpgError, InventarioCheioError, PersonagemMortoError
 
 
 if __name__ == "__main__":
-    # Quatro batalhas que exercitam o polimorfismo em combinações distintas.
-    # O Combate é o mesmo nos quatro casos — quem varia o comportamento são
-    # os próprios combatentes (override de atacar/receber_dano) e o protocolo
-    # de tipo de dano. O Combate nunca usa isinstance.
+    # Aula 8: as exceções do domínio nascem fundo na pilha (Inventario,
+    # Personagem) e são capturadas na borda (Combate, aqui no main). O
+    # programa roda do início ao fim SEM nenhum traceback.
 
-    print("=== Batalha 1: Guerreiro vs Goblin ===")
-    # Físico vs físico — vitória fácil do Guerreiro.
+    print("=== 1. Batalha normal ===")
+    # Combate comum: nenhuma exceção do domínio é levantada.
     Combate(Guerreiro("Boromir", 100, 20), Goblin()).lutar()
 
-    print("\n=== Batalha 2: Guerreiro vs Esqueleto ===")
-    # Físico vs resistente a físico — o Esqueleto recebe metade do dano,
-    # então o Guerreiro demora mais para vencer.
-    Combate(Guerreiro("Boromir", 100, 20), Esqueleto()).lutar()
+    print("\n=== 2. Inventário cheio ===")
+    # Captura ESPECÍFICA de InventarioCheioError: enchemos o inventário
+    # além do LIMITE (começa com 2 poções; cabem 8 antes de estourar).
+    heroi = Guerreiro("Aragorn", 100, 20)
+    try:
+        for numero in range(3, 12):
+            heroi.inventario.adicionar(Item(f"Poção {numero}", "pocao", 20))
+    except InventarioCheioError as erro:
+        print(f"  Mochila lotada! ({erro})")
 
-    print("\n=== Batalha 3: Mago vs Esqueleto ===")
-    # Mágico vs resistente a físico — o dano "magico" do Mago passa integral,
-    # ignorando a resistência. Caso pedagogicamente central: o Combate não
-    # sabe disso; quem resolve é o protocolo de tipo_dano nos objetos.
-    Combate(Mago("Gandalf", 80, 15), Esqueleto()).lutar()
+    print("\n=== 3. Personagem morto tenta atacar ===")
+    # Captura ESPECÍFICA de PersonagemMortoError: derrubamos o herói com
+    # receber_dano e mandamos ele atacar.
+    caido = Mago("Gandalf", 80, 15)
+    caido.receber_dano(999)                 # vida vai a zero
+    try:
+        caido.atacar(Goblin())
+    except PersonagemMortoError as erro:
+        print(f"  Ataque cancelado: {erro}")
 
-    print("\n=== Batalha 4: Arqueiro vs Dragão ===")
-    # Físico vs fogo, com derrota do herói: com flechas=2, o Arqueiro causa
-    # 27 nos dois primeiros turnos e cai para 9 quando as flechas acabam,
-    # morrendo antes de derrubar o Dragão. O dano "fogo" passa integral.
-    Combate(Arqueiro("Legolas", 90, 18, flechas=2), Dragao()).lutar()
+    print("\n=== 4. Captura genérica com RpgError ===")
+    # A base RpgError pega QUALQUER falha do domínio — aqui, a mesma
+    # PersonagemMortoError, mas tratada pela classe-base.
+    try:
+        caido.atacar(Goblin())
+    except RpgError as erro:
+        print(f"  Alguma regra do jogo impediu a ação: {erro}")
+
+    print("\nFim da demonstração.")
