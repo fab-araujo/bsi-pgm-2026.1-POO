@@ -14,6 +14,7 @@ Repositório de acompanhamento da disciplina. Cada pasta contém a solução de 
 | `aula6/` | Aula 6 | Polimorfismo e duck typing — subclasses de `Monstro` (`monstros.py`), classe `Combate`, protocolo de tipo de dano |
 | `aula8/` | Aula 8 | Tratamento de exceções — hierarquia `RpgError` (`exceptions.py`), `raise` no `Inventario`/`Personagem`, captura na borda do `Combate` |
 | `aula9/` | Aula 9 | Properties com validação — `vida` (clamp), `nivel` (`ValueError`), `xp` (`XPInvalidoError`) + sistema de XP no `Combate` |
+| `aula10/` | Aula 10 | Classes abstratas e sobrecarga de operadores — `Personagem(ABC)`, `golpe_especial`, id de domínio e `__str__`/`__repr__`/`__eq__`/`__hash__` |
 
 ## Como usar
 
