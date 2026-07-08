@@ -1,46 +1,41 @@
 from rpg.guerreiro import Guerreiro
-from rpg.mago import Mago
 from rpg.monstros import Goblin
-from rpg.item import Item
 from rpg.combate import Combate
-from rpg.exceptions import RpgError, InventarioCheioError, PersonagemMortoError
+from rpg.exceptions import XPInvalidoError
 
 
 if __name__ == "__main__":
-    # Aula 8: as exceções do domínio nascem fundo na pilha (Inventario,
-    # Personagem) e são capturadas na borda (Combate, aqui no main). O
-    # programa roda do início ao fim SEM nenhum traceback.
+    # Aula 9: as três properties de Personagem, cada uma com sua estratégia
+    # de setter (clamp / ValueError / XPInvalidoError), e o XP no combate.
+    # O programa roda do início ao fim SEM traceback.
 
-    print("=== 1. Batalha normal ===")
-    # Combate comum: nenhuma exceção do domínio é levantada.
-    Combate(Guerreiro("Boromir", 100, 20), Goblin()).lutar()
+    print("=== 1. Validação da vida (clamp) ===")
+    g = Guerreiro("Boromir", 100, 20)      # vida_maxima = 100
+    g.vida = -50
+    print(f"  vida = -50  →  {g.vida}   (piso 0)")
+    g.vida = 999
+    print(f"  vida = 999  →  {g.vida}   (teto vida_maxima = {g.vida_maxima})")
 
-    print("\n=== 2. Inventário cheio ===")
-    # Captura ESPECÍFICA de InventarioCheioError: enchemos o inventário
-    # além do LIMITE (começa com 2 poções; cabem 8 antes de estourar).
+    print("\n=== 2. Validação do nível (ValueError) ===")
+    try:
+        g.nivel = 0
+    except ValueError as erro:
+        print(f"  nível inválido barrado: {erro}")
+
+    print("\n=== 3. Validação do XP (XPInvalidoError) + subida de nível ===")
+    g.ganhar_xp(120)                       # imprime a subida para o nível 2
+    print(f"  após ganhar 120 XP  →  xp = {g.xp}, nível = {g.nivel}")
+    try:
+        g.xp = 50                          # tentar regredir de 120 para 50
+    except XPInvalidoError as erro:
+        print(f"  regressão de XP barrada: {erro}")
+
+    print("\n=== 4. Combate que dá XP ===")
     heroi = Guerreiro("Aragorn", 100, 20)
-    try:
-        for numero in range(3, 12):
-            heroi.inventario.adicionar(Item(f"Poção {numero}", "pocao", 20))
-    except InventarioCheioError as erro:
-        print(f"  Mochila lotada! ({erro})")
-
-    print("\n=== 3. Personagem morto tenta atacar ===")
-    # Captura ESPECÍFICA de PersonagemMortoError: derrubamos o herói com
-    # receber_dano e mandamos ele atacar.
-    caido = Mago("Gandalf", 80, 15)
-    caido.receber_dano(999)                 # vida vai a zero
-    try:
-        caido.atacar(Goblin())
-    except PersonagemMortoError as erro:
-        print(f"  Ataque cancelado: {erro}")
-
-    print("\n=== 4. Captura genérica com RpgError ===")
-    # A base RpgError pega QUALQUER falha do domínio — aqui, a mesma
-    # PersonagemMortoError, mas tratada pela classe-base.
-    try:
-        caido.atacar(Goblin())
-    except RpgError as erro:
-        print(f"  Alguma regra do jogo impediu a ação: {erro}")
+    print("  antes: ", end="")
+    heroi.mostrar_status()
+    Combate(heroi, Goblin()).lutar()       # Goblin nível 1 → 50 XP ao vencer
+    print("  depois: ", end="")
+    heroi.mostrar_status()
 
     print("\nFim da demonstração.")
