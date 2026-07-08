@@ -24,3 +24,11 @@ class InventarioCheioError(RpgError):
 
 class PersonagemMortoError(RpgError):
     """Levantada quando um personagem morto tenta atacar."""
+
+
+class XPInvalidoError(RpgError):
+    """Levantada quando se tenta fazer o XP regredir (XP é cumulativo).
+
+    Entra na mesma hierarquia (RpgError) — por isso o `except RpgError` do
+    Combate captura também esta falha.
+    """
