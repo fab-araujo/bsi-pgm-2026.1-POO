@@ -1,3 +1,8 @@
+from __future__ import annotations
+
+from rpg.efeito import Efeito
+
+
 class Monstro:
     """Representa um monstro inimigo. Sem inventário."""
 
@@ -15,6 +20,9 @@ class Monstro:
         # personagem ganha ao matar um monstro depende do nível dele.
         # Monstro NÃO tem xp: esse atributo é exclusivo do jogador.
         self.nivel = nivel
+        # efeitos contínuos ativos (Aula 11): o Mago aplica queimadura ao
+        # monstro alvo, então o Monstro também precisa suportar efeitos.
+        self.efeitos_ativos: list[Efeito] = []
 
     def atacar(self, alvo) -> int:
         """Ataca o alvo e retorna o dano causado."""
@@ -26,6 +34,10 @@ class Monstro:
 
     def esta_vivo(self) -> bool:
         return self.vida > 0
+
+    def adicionar_efeito(self, efeito: Efeito) -> None:
+        """Acrescenta um Efeito à lista de efeitos ativos (Aula 11)."""
+        self.efeitos_ativos.append(efeito)
 
     def mostrar_status(self) -> None:
         """Imprime o estado do monstro (sem XP — esse é do Personagem)."""
