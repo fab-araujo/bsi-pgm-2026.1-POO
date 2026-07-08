@@ -12,6 +12,7 @@ Repositório de acompanhamento da disciplina. Cada pasta contém a solução de 
 | `aula4/` | Aula 4 | Pacote `rpg/` com composição — `Item`, `Inventario`, `@classmethod` |
 | `aula5/` | Aula 5 | Herança — `Guerreiro`, `Mago`, `Arqueiro` com três padrões de override + ensaio |
 | `aula6/` | Aula 6 | Polimorfismo e duck typing — subclasses de `Monstro` (`monstros.py`), classe `Combate`, protocolo de tipo de dano |
+| `aula8/` | Aula 8 | Tratamento de exceções — hierarquia `RpgError` (`exceptions.py`), `raise` no `Inventario`/`Personagem`, captura na borda do `Combate` |
 
 ## Como usar
 
