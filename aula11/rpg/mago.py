@@ -1,4 +1,5 @@
 from rpg.personagem import Personagem
+from rpg.efeito import Efeito
 
 
 class Mago(Personagem):
@@ -23,6 +24,19 @@ class Mago(Personagem):
         super().__init__(nome, vida, forca, nivel, xp)
         # mana é decorativo nesta aula — ganha papel real em aulas seguintes
         self.mana = mana
+
+    def atacar(self, alvo) -> int:
+        """Ataque normal + queimadura no alvo (Aula 11).
+
+        Delega o dano ao atacar da base (validação, cálculo e aplicação) e,
+        DEPOIS de causar o dano, deixa um Efeito de Queimadura no alvo
+        (-5 por turno, 3 turnos). É no atacar, não no golpe_especial, porque
+        o golpe_especial será refatorado na Aula 12 — a queimadura é
+        independente disso.
+        """
+        dano = super().atacar(alvo)
+        alvo.adicionar_efeito(Efeito("Queimadura", -5, 3))
+        return dano
 
     def _calcular_dano(self, alvo) -> int:
         """Dano-base da classe (super) + dano mágico fixo."""
