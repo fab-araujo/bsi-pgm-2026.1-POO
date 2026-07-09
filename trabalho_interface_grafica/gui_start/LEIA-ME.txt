@@ -1,0 +1,21 @@
+gui_start — ponto de partida do Trabalho de Interface Gráfica
+=============================================================
+
+Esta pasta JÁ RODA. Para ver, no terminal:
+
+    cd gui_start
+    python3 gui_rpg.py
+
+Deve abrir uma janela com o status do herói e um botão "Atacar" que funciona —
+antes de você escrever qualquer linha.
+
+O que tem aqui:
+- rpg/         o projeto no estado da AULA 11 (o mesmo snapshot do SIGAA).
+               A GUI só precisa disto; NÃO depende da atividade da Aula 12.
+- gui_rpg.py   o esqueleto que você vai estender (procure a palavra "TODO").
+
+Este é um trabalho À PARTE da atividade da Aula 12. Desenvolva a sua janela
+aqui. No fim (entrega / Aula 14), leve o SEU gui_rpg.py para dentro do projeto
+final — ele continua funcionando, porque usa só métodos que o Personagem já tem.
+
+Enunciado completo (o que fazer, catálogo de peças, rubrica): comando.md, no SIGAA.

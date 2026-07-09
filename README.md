@@ -16,6 +16,7 @@ Repositório de acompanhamento da disciplina. Cada pasta contém a solução de 
 | `aula09/` | Aula 9 | Properties com validação — `vida` (clamp), `nivel` (`ValueError`), `xp` (`XPInvalidoError`) + sistema de XP no `Combate` |
 | `aula10/` | Aula 10 | Classes abstratas e sobrecarga de operadores — `Personagem(ABC)`, `golpe_especial`, id de domínio e `__str__`/`__repr__`/`__eq__`/`__hash__` |
 | `aula11/` | Aula 11 | Type hints e dataclasses — anotações nos métodos públicos + `Efeito` (`@dataclass`, `efeito.py`) e a queimadura no ataque do `Mago` |
+| `trabalho_interface_grafica/` | recesso | **Ponto de partida** do Trabalho de GUI (Tkinter). A pasta `gui_start/` já roda (`cd gui_start && python3 gui_rpg.py`): traz o `rpg/` no estado da Aula 11 + o esqueleto `gui_rpg.py`. **Não é solução** — o aluno completa os `TODO`. Base Aula 11; não depende da atividade da Aula 12. |
 
 ## Como usar
 
